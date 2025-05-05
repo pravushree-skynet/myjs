@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    input {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+<style>
+.calculation{
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+</style>
+
+  <!---------------------GST Calculation Open------------------>
+<div class="calculation">
+  <h1 class="text-center">GST Calculation</h1>
+  <form>
+  <input type="text" placeholder="Type a amount" class="formControl" id="number">
+  <p>Incluted 18% GST <span id="printGst"></span></p>
+  <input type="text" placeholder="Type a tips" class="formControl" id="tips">
+  <h3>Total Bill: <span id="printTips"></span> </h3>
+  <button onclick="calculation()" class="btn tips" type="button">Submit</button>
+  
+</form>
+</div>
+
+<script>
+  
+  
+  function calculation() {
+    const amount = Number(document.getElementById('number').value)
+    const tipsAmount = Number(document.getElementById('tips').value)
+    // const amountValue = amount.value
+    
+// Calculate 18% GST
+    const gstPercentage = 18;
+    const calGST = amount + (amount * gstPercentage / 100);
+
+    if(isNaN(amount)){
+     return document.getElementById('printGst').innerText ="type a valid no"
+ 
+    }else{
+      document.getElementById('printGst').innerHTML = calGST;
+    }
+
+// Print Html
+    // document.getElementById('printGst').innerHTML = calGST;
+
+    // Calculate Tips amount
+    const withTips = calGST + tipsAmount;
+    if(tipsAmount >= 0){
+      document.getElementById('printTips').innerHTML = withTips;
+    }
+  }
+
+</script>
+
+</body>
+
+</html>
