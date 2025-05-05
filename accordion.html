@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    input{
+      width: 100%;
+      font-size: 15px;
+      padding: 10px 20px;
+    }
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+
+  <!---------------------Tab accordion------------------>
+<style>
+  .toggleHolder, .calculation {
+  max-width: 900px;
+  margin:0 auto;
+}
+.toggleHeading {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: left;
+  background-color: #424242 !important;
+  padding:10px;
+  border-bottom:1px solid #fff;
+  cursor: pointer;
+}
+.toggleContent{
+display: none;
+}
+.faqItem.active .toggleHeading{
+  background-color: red;
+}
+.faqItem.active .toggleContent{
+ display: block;
+}
+</style>
+
+
+<div class="toggleHolder">
+  <h1 class="text-center">Custom Tab</h1>
+  <ul>
+    <li class="faqItem">
+    <div class="toggleHeading">How are you?</div>
+    <div class="toggleContent">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi </p>
+    </div></li>
+
+    <li class="faqItem">
+      <div class="toggleHeading">What are you doing?</div>
+    <div class="toggleContent">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi </p>
+    </div></li>
+
+    <li class="faqItem">
+      <div class="toggleHeading">How can I help you?</div>
+    <div class="toggleContent">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi </p>
+    </div></li>
+
+  </ul>
+</div>
+<script>
+
+const accordions = document.querySelectorAll('.faqItem');
+
+accordions.forEach(item => {
+
+const toggleHead = item.querySelector('.toggleHeading');
+toggleHead.addEventListener('click', () => {
+//  item.classList.toggle('active');
+
+//remove other items active class
+accordions.forEach(itemHide => {
+      if (itemHide !== item) {
+        itemHide.classList.remove('active');
+      }
+    });
+
+//click for active
+ item.classList.toggle('active');
+
+});
+});
+
+
+</script>
+
+</body>
+
+</html>

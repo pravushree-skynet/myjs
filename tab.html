@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    input{
+      width: 100%;
+      font-size: 15px;
+      padding: 10px 20px;
+    }
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+<!---------------------Tab Open------------------>
+
+  <style>
+    .tabHolder {
+      text-align: center;
+    }
+
+    .btnBox {
+      display: inline-flex;
+    }
+
+    .tabButtons {
+      background-color: #ffffff;
+      border: none;
+      padding: 10px 25px;
+      cursor: pointer;
+      font-size: 15px;
+      width: 200px;
+    }
+
+    .tabButtons:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .tabContent {
+      display: none;
+      padding: 20px;
+      text-align: center;
+      background-color: #7e6b07;
+    }
+    .tabContentActive {
+      display: block;
+    }
+
+    .btnActive {
+      background-color: #7e6b07;
+      color: #fff;
+    }
+  </style>
+
+  <div class="tabHolder">
+<h1 class="text-center">Custom Tab</h1>
+    <div class="btnBox">
+      <button class="tabButtons btnActive" data-tablink="t1">Tab Item One</button>
+      <button class="tabButtons" data-tablink="t2">Tab Item Two</button>
+      <button class="tabButtons" data-tablink="t3">Tab Item Three</button>
+    </div>
+
+    <div class="tabContent tabContentActive" id="t1">
+      <h2>Tab Item One</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
+    </div>
+    <div class="tabContent" id="t2">
+      <h2>Tab Item Two</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi </p>
+    </div>
+    <div class="tabContent" id="t3">
+      <h2>Tab Item Three</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate </p>
+    </div>
+  </div>
+
+
+  <script>
+
+    const tabBtn = document.querySelectorAll(".tabButtons")
+    const tabText = document.querySelectorAll(".tabContent")
+  
+    tabBtn.forEach(button => {
+
+      button.addEventListener('click', () => {
+        const target = button.getAttribute('data-tablink');
+
+        //this is for removed active class by a click
+        tabBtn.forEach(revBtnActive => revBtnActive.classList.remove('btnActive'));
+        tabText.forEach(revTextActive => revTextActive.classList.remove('tabContentActive'));
+
+        //this is for add active class by a click
+        button.classList.add('btnActive');
+
+        //this is for add active class by a click when found id
+        document.getElementById(target).classList.add('tabContentActive');
+
+
+      });
+
+    });
+
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
