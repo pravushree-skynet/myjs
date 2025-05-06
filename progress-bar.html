@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    input, .formControl{
+      width: 100%;
+      font-size: 15px;
+      padding: 10px 20px;
+      box-sizing: border-box;
+    }
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+.holder{
+  max-width:600px;
+  margin: 0 auto;
+}
+.progressBar {
+  width: 100%;
+  height: 20px;
+  background-color: #000;
+  margin-bottom: 50px;
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  left: 0;
+  width: 10%;
+  height: 20px;
+  background-color: #f00;
+  top: 0;
+  bottom: 0;
+}
+#progressBar::after {
+  content: 'Target 60';
+  right: 0;
+  position: absolute;
+  top: -20px;
+  color: #206d10;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+
+
+
+
+<div class="holder">
+<h1>Progress Bar</h1>
+
+<h3 id="message"></h3>
+<br><br>
+
+<div class="progressBar" id="progressBar">
+<div class="overlay" id="overlay"></div>
+</div>
+
+
+
+<div class="itemAddBar">
+  <select class="formControl" id="dropdown">
+<option value="10">1</option>
+<option value="20">2</option>
+<option value="30">3</option>
+<option value="40">4</option>
+<option value="50">5</option>
+<option value="60">6</option>
+<option value="70">7</option>
+<option value="80">8</option>
+  </select>
+</div>
+</div>
+
+
+
+<script>
+const overLay = document.getElementById('overlay');
+const valueBox = document.getElementById('dropdown');
+
+
+
+dropdown.addEventListener('change', function(){
+
+  const value = valueBox.value;
+  overLay.style.width =  value + "%";
+
+
+if(value >= 60){
+  document.getElementById('message').innerHTML = "Target completed";
+  
+  overLay.style.width = "inherit";
+}else if(value <= 61){
+  document.getElementById('message').innerHTML = " ";
+}
+
+
+});
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+
+</html>
