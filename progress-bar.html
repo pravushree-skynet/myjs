@@ -51,11 +51,12 @@ h2 {
   width: 10%;
   height: 20px;
   background-color: #f00;
+  text-align: right;
   top: 0;
   bottom: 0;
 }
 #progressBar::after {
-  content: 'Target 60';
+  content: 'Target $60';
   right: 0;
   position: absolute;
   top: -20px;
@@ -72,17 +73,20 @@ h2 {
 
 <div class="holder">
 <h1>Progress Bar</h1>
-
-<h3 id="message"></h3>
 <br><br>
 
+<h3 id="message"></h3>
 <div class="progressBar" id="progressBar">
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay"><span id="totalValue"></span></div>
 </div>
 
 
+<div style="display: flex;">
+<div style="width: 50%;"><img style="width: 100%;" src="img/Longhorn.jpg" alt=""></div>
 
-<div class="itemAddBar">
+<div class="itemAddBar" style="padding-left: 30px; width: 50%; text-align:left">
+<h3>Longhorn Painting</h3>
+<h4>Price: $10</h4>
   <select class="formControl" id="dropdown">
 <option value="10">1</option>
 <option value="20">2</option>
@@ -97,17 +101,33 @@ h2 {
 </div>
 
 
+</div>
+
+
 
 <script>
 const overLay = document.getElementById('overlay');
 const valueBox = document.getElementById('dropdown');
 
 
+// Show 10% overlay and "$10" text on first load
+window.onload = function () {
+    overLay.style.width = "10%";
+    document.getElementById('totalValue').innerHTML = "$10";
+    document.getElementById('message').innerHTML = " ";
+  };
+
+
 
 dropdown.addEventListener('change', function(){
 
   const value = valueBox.value;
-  overLay.style.width =  value + "%";
+  overLay.style.width = value + "%";
+
+
+// Print value in the progress bar
+  const overlayValue = document.getElementById('totalValue').innerHTML = "$" + value ;
+  document.getElementById('totalValue').value= "";
 
 
 if(value >= 60){
@@ -120,14 +140,6 @@ if(value >= 60){
 
 
 });
-
-
-
-
-
-
-
-
 
 </script>
 

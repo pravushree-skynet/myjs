@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    input, .formControl{
+      width: 100%;
+      font-size: 15px;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 25px;
+      color: #000;
+    }
+    .btn{
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+  margin-top: 10px;
+}
+#productList {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 110px;
+}
+#productList img{
+  width: 100%;
+}
+.holder{
+  max-width:1600px;
+  margin: 0 auto;
+}
+.progressBar {
+  width: 100%;
+  height: 20px;
+  background-color: #000;
+  margin-bottom: 50px;
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  left: 0;
+  height: 20px;
+  background-color: #f00;
+  text-align: right;
+  top: 0;
+  bottom: 0;
+}
+#progressBar::after {
+  content: '';
+  right: 0;
+  position: absolute;
+  top: -20px;
+  color: #206d10;
+}
+.quantitySelect {
+  display: flex;
+  max-width: 160px;
+  margin: 0 auto;
+}
+.quantitySelect button {
+  width: 60px;
+  font-size: 20px;
+}
+h3 {
+  font-size: 25px;
+  margin: 0 0 10px;
+  color: #000;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+
+
+
+
+<div class="holder">
+<h1>All Total: <span id="allTotal"></span></h1>
+<div class="progressBar" id="progressBar">
+<div class="overlay" id="overlay"><span id="totalValue"></span></div>
+</div>
+
+<ul id="productList">
+</ul>
+
+
+
+
+<script>
+//all products details
+const productOne = {
+  image : "img/Alatoona.jpg",
+  name : "Nice Painting",
+  price : 50,
+  button : "Add to Cart"
+};
+const productTwo = {
+  image : "img/Longhorn.jpg",
+  name : "Very Nice Painting",
+  price : 90,
+  button : "Add to Cart"
+};
+const productThree = {
+  image : "img/white.jpg",
+  name : "Awesome Painting",
+  price : 100,
+  button : "Add to Cart"
+};
+
+//store all object value in arry 
+const products = [productOne, productTwo, productThree]
+
+//blank string store all item
+let htmlCode = '';
+products.forEach((product, index) => {
+  htmlCode +=`
+    <li>
+      <img src="${product.image}" alt="img">
+      <h3>${product.name}</h3>
+      <p><strong>Price:</strong> $<span id="price-${index}">${product.price}</span></p>
+      <p><strong>Quantity:</strong></p>
+      <div class="quantitySelect" data-index="${index}">
+        <button class="minusButton">-</button>
+        <input class="quantityField" id="quantity-${index}" value="1" type="text" disabled>
+        <button class="plusButton">+</button>
+      </div>
+      <p><strong>Total:</strong> $<span id="total-${index}">${product.price}</span></p>
+      <button class="btn addToCartBtn" data-index="${index}">${product.button}</button>
+    </li>
+  `;
+});
+document.getElementById('productList').innerHTML = htmlCode;
+
+
+
+
+
+// quantity selecttor
+document.querySelectorAll('.quantitySelect').forEach((container) => {
+  const index = container.dataset.index;
+  const minusButton = container.querySelector('.minusButton');
+  const quantityField = container.querySelector('.quantityField');
+  const plusButton = container.querySelector('.plusButton');
+  const price = parseFloat(document.getElementById(`price-${index}`).textContent);
+  const totalDisplay = document.getElementById(`total-${index}`);
+
+  const updateTotal = () => {
+    const quantity = parseInt(quantityField.value);
+    const total = price * quantity;
+    totalDisplay.textContent = total.toFixed(2);
+  };
+
+  plusButton.addEventListener('click', () => {
+    let currentQuantity = parseInt(quantityField.value);
+    quantityField.value = currentQuantity + 1;
+    updateTotal();
+  });
+
+  minusButton.addEventListener('click', () => {
+    let currentQuantity = parseInt(quantityField.value);
+    if (currentQuantity > 1) {
+      quantityField.value = currentQuantity - 1;
+      updateTotal();
+    }
+  });
+});
+
+
+let cartTotal = 0; // Initialize total cart price
+
+const overLay = document.getElementById('overlay');
+document.querySelectorAll('.addToCartBtn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const index = btn.getAttribute('data-index');
+    const quantity = parseInt(document.getElementById(`quantity-${index}`).value);
+    const price = parseFloat(document.getElementById(`price-${index}`).textContent);
+    const total = price * quantity;
+
+    cartTotal += total; // Add to cart total
+    console.log(`Added to cart: $${total.toFixed(2)} | $${cartTotal.toFixed(0)}`);
+
+    // Optionally display in UI
+    document.getElementById('totalValue').textContent = `$${cartTotal.toFixed(0)}`;
+
+// add width style total price wise 
+  const valueBar = cartTotal;
+  overLay.style.width = valueBar + "px";
+
+
+  });
+});
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+
+</html>
