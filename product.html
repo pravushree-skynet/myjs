@@ -87,6 +87,58 @@ h3 {
   margin: 0 0 10px;
   color: #000;
 }
+.proHolder {
+  display: flex;
+}
+.productArea {
+  width: 70%;
+}
+.cartArea {
+  width: 30%;
+  padding: 20px;
+}
+#allTotal{
+  color: #206d10;
+}
+#cartItems .headerPart {
+  display: flex;
+  gap: 10px;
+}
+#cartItems .productContent {
+  display: flex;
+   justify-content: space-between;
+  gap: 10px;
+}
+#cartItems .productContent strong {
+  display: block;
+}
+#cartItems {
+  margin:0px;
+  padding: 30px 15px;
+    background-color: #535151;
+}
+#cartItems  h4 {
+  font-size: 28px !important;
+  margin: 0;
+}
+#cartItems .productContent p {
+  margin: 0;
+}
+.closeBtn {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  background-color: #f76060;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+#cartItems li {
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #8e8383;
+  margin-bottom: 20px;
+}
   </style>
 </head>
 
@@ -102,62 +154,73 @@ h3 {
 <div class="overlay" id="overlay"><span id="totalValue"></span></div>
 </div>
 
+<div class="proHolder">
+  <div class="productArea">
 <ul id="productList">
 </ul>
+  </div>
+<div class="cartArea">
+<h2>Cart</h2>
+<ul id="cartItems"></ul>
+</div>
+
+</div>
+
 
 
 
 
 <script>
-//all products details
+// All products
 const productOne = {
-  image : "img/Alatoona.jpg",
-  name : "Nice Painting",
-  price : 50,
-  button : "Add to Cart"
+  image: "img/Alatoona.jpg",
+  name: "Nice Painting",
+  price: 50,
+  button: "Add to Cart"
 };
 const productTwo = {
-  image : "img/Longhorn.jpg",
-  name : "Very Nice Painting",
-  price : 90,
-  button : "Add to Cart"
+  image: "img/Longhorn.jpg",
+  name: "Very Nice Painting",
+  price: 90,
+  button: "Add to Cart"
 };
 const productThree = {
-  image : "img/white.jpg",
-  name : "Awesome Painting",
-  price : 100,
-  button : "Add to Cart"
+  image: "img/white.jpg",
+  name: "Awesome Painting",
+  price: 100,
+  button: "Add to Cart"
 };
 
-//store all object value in arry 
-const products = [productOne, productTwo, productThree]
+const products = [productOne, productTwo, productThree];
 
-//blank string store all item
+// Load cart from localStorage FIRST
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cartTotal = parseFloat(localStorage.getItem('cartTotal')) || 0;
+
+// Render products to page
 let htmlCode = '';
 products.forEach((product, index) => {
-  htmlCode +=`
+  htmlCode += `
     <li>
-      <img src="${product.image}" alt="img">
+      <div class="thumImg"><img src="${product.image}" alt="img"></div>
       <h3>${product.name}</h3>
-      <p><strong>Price:</strong> $<span id="price-${index}">${product.price}</span></p>
-      <p><strong>Quantity:</strong></p>
-      <div class="quantitySelect" data-index="${index}">
-        <button class="minusButton">-</button>
-        <input class="quantityField" id="quantity-${index}" value="1" type="text" disabled>
-        <button class="plusButton">+</button>
+      <div class="productContent">
+        <p><strong>Price:</strong> $<span id="price-${index}">${product.price}</span></p>
+        <p><strong>Quantity:</strong></p>
+        <div class="quantitySelect" data-index="${index}">
+          <button class="minusButton">-</button>
+          <input class="quantityField" id="quantity-${index}" value="1" type="text" disabled>
+          <button class="plusButton">+</button>
+        </div>
+        <p><strong>Total:</strong> $<span id="total-${index}">${product.price}</span></p>
+        <button class="btn addToCartBtn" data-index="${index}">${product.button}</button>
       </div>
-      <p><strong>Total:</strong> $<span id="total-${index}">${product.price}</span></p>
-      <button class="btn addToCartBtn" data-index="${index}">${product.button}</button>
     </li>
   `;
 });
 document.getElementById('productList').innerHTML = htmlCode;
 
-
-
-
-
-// quantity selecttor
+// Quantity control
 document.querySelectorAll('.quantitySelect').forEach((container) => {
   const index = container.dataset.index;
   const minusButton = container.querySelector('.minusButton');
@@ -187,34 +250,88 @@ document.querySelectorAll('.quantitySelect').forEach((container) => {
   });
 });
 
-
-let cartTotal = 0; // Initialize total cart price
-
+// Add to cart logic
 const overLay = document.getElementById('overlay');
+
 document.querySelectorAll('.addToCartBtn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const index = btn.getAttribute('data-index');
+    const product = products[index];
     const quantity = parseInt(document.getElementById(`quantity-${index}`).value);
     const price = parseFloat(document.getElementById(`price-${index}`).textContent);
     const total = price * quantity;
 
-    cartTotal += total; // Add to cart total
-    console.log(`Added to cart: $${total.toFixed(2)} | $${cartTotal.toFixed(0)}`);
+    cart.push({
+      image: product.image,
+      name: product.name,
+      price: product.price,
+      quantity: quantity,
+      total: total
+    });
 
-    // Optionally display in UI
-    document.getElementById('totalValue').textContent = `$${cartTotal.toFixed(0)}`;
+    cartTotal += total;
 
-// add width style total price wise 
-  const valueBar = cartTotal;
-  overLay.style.width = valueBar + "px";
+    // Save to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('cartTotal', cartTotal.toString());
 
-
+    renderCartUI();
   });
 });
 
+// Render Cart Function
+function renderCartUI() {
+  const cartItemsContainer = document.getElementById('cartItems');
+  cartItemsContainer.innerHTML = '';
 
+  cart.forEach((item, index) => {
+    cartItemsContainer.innerHTML += `
+      <li>
+        <div class="headerPart">
+          <div class="thumImg"> <img src="${item.image}" alt="img" width="80"></div>
+          <h4>${item.name}</h4>
+          <button class="closeBtn" data-index="${index}">×</button>
+        </div>
+        <div class="productContent">
+          <p><strong>Price:</strong> $${item.price}</p>
+          <p><strong>Quantity:</strong> ${item.quantity}</p>
+          <p><strong>Total:</strong> $${item.total.toFixed(2)}</p>
+        </div>
+      </li>
+    `;
+  });
 
+  document.getElementById('totalValue').textContent = `$${cartTotal.toFixed(0)}`;
+  overLay.style.width = `${Math.min(cartTotal, 1600)}px`;
 
+  // Discount logic
+  if (cartTotal >= 1600) {
+    const discount = cartTotal * 0.10;
+    document.getElementById('allTotal').innerHTML = `Congratulations you got 10% discount, and save $${discount.toFixed(2)}`;
+    document.getElementById('totalValue').innerText = (cartTotal - discount).toFixed(2);
+  } else {
+    document.getElementById('allTotal').innerHTML = "";
+  }
+
+  // Close buttons
+  document.querySelectorAll('.closeBtn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const indexToRemove = parseInt(btn.getAttribute('data-index'));
+      const removedItem = cart[indexToRemove];
+      cartTotal -= removedItem.total;
+      cart.splice(indexToRemove, 1);
+
+      // Update localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('cartTotal', cartTotal.toString());
+
+      renderCartUI();
+    });
+  });
+}
+
+// 🔁 Restore cart on initial load
+renderCartUI();
 
 
 
