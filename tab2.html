@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+     input, textarea {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+
+
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+<!---------------------Tab Open------------------>
+
+  <style>
+    .tabHolder {
+      text-align: center;
+    }
+
+    .btnBox {
+      display: inline-flex;
+    }
+
+    .tabButtons {
+      background-color: #ffffff;
+      border: none;
+      padding: 10px 25px;
+      cursor: pointer;
+      font-size: 15px;
+      width: 200px;
+    }
+
+    .tabButtons:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .tabContent {
+      display: none;
+      padding: 20px;
+      text-align: center;
+      background-color: #7e6b07;
+    }
+    .tabContentActive {
+      display: block;
+    }
+
+    .btnActive {
+      background-color: #7e6b07;
+      color: #fff;
+    }
+    .inpuForm {
+  max-width: 600px;
+  margin: 30px auto;
+}
+  </style>
+
+  <div class="tabHolder">
+<h1 class="text-center">Custom Tab</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate </p>
+
+    <div id="btnBoxArea">
+
+    </div>
+
+    <div id="tabContentArea">
+   
+    </div>
+
+
+    <form class="inpuForm">
+      <input type="text" placeholder="Input a heading" id="heading">
+      <textarea placeholder="Type a Pragraph" id="paragraph"></textarea>
+      <button id="Submit" type="button" onclick="tabTrigger()" class="btn">Submit</button>
+    </form>
+  </div>
+
+
+  <script>
+
+let tabCounter = 0;
+
+function tabTrigger() {
+  const title = document.getElementById('heading').value;
+  const content = document.getElementById('paragraph').value;
+
+  if (!title || !content) return alert("Please fill in both fields.");
+
+  tabCounter++;
+
+  // Create new tab button
+  const tabBtn = document.createElement('button');
+  tabBtn.className = 'tabButtons';
+  tabBtn.setAttribute('data-tablink', `tab${tabCounter}`);
+  tabBtn.innerText = title;
+
+  // Create new tab content
+  const tabContent = document.createElement('div');
+  tabContent.className = 'tabContent';
+  tabContent.id = `tab${tabCounter}`;
+  tabContent.innerText = content;
+
+  // Append to DOM
+  document.getElementById('btnBoxArea').appendChild(tabBtn);
+  document.getElementById('tabContentArea').appendChild(tabContent);
+
+  // Re-attach event listeners
+  attachTabListeners();
+}
+
+function attachTabListeners() {
+  const tabButtons = document.querySelectorAll('.tabButtons');
+  const tabContents = document.querySelectorAll('.tabContent');
+
+  tabButtons.forEach(button => {
+    button.onclick = () => {
+      const target = button.getAttribute('data-tablink');
+
+      tabButtons.forEach(btn => btn.classList.remove('btnActive'));
+      tabContents.forEach(tab => tab.classList.remove('tabContentActive'));
+
+      button.classList.add('btnActive');
+      document.getElementById(target).classList.add('tabContentActive');
+    };
+  });
+}
+
+    
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
