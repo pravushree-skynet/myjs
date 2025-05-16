@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title here</title>
+  <style>
+    ul{
+      list-style-type: none;
+    }
+  p {
+      font-size: 20px;
+      color: #fff;
+    }
+h2 {
+      font-size: 45px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+     input, textarea {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+    .btn{
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 20px 50px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+}
+.sliderHolder{
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.sliderBox {
+display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+}
+  </style>
+</head>
+
+<body bgcolor="#999" style="color: #fff; text-align: center;">
+
+  <div class="sliderHolder">
+  <h1 class="text-center">Custom Slider</h1>
+
+    <div class="sliderBox">
+      <div class="slide"><img src="img/Alatoona.jpg" alt="img"></div>
+      <div class="slide"><img src="img/Longhorn.jpg" alt="img"></div>
+      <div class="slide"><img src="img/white.jpg" alt="img"></div>
+    </div>
+<div style="display: flex; gap: 10px; text-align: center; justify-content: center;"><button class="btn" id="prevBtn">Prev</button> <button class="btn" id="nextBtn">Next</button></div>
+
+    </div>
+   </div>
+
+
+<script>
+const sliderBox = document.querySelector('.sliderBox');
+const slides = document.querySelectorAll('.slide');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+
+let store = 0;
+
+function showSlide(i) {
+  store = (i + slides.length) % slides.length;
+  sliderBox.style.transform = `translateX(-${store * 100}%)`;
+}
+
+nextBtn.addEventListener('click', () => showSlide(store + 1));
+prevBtn.addEventListener('click', () => showSlide(store - 1));
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
