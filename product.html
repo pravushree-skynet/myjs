@@ -139,6 +139,13 @@ h3 {
   border-bottom: 1px solid #8e8383;
   margin-bottom: 20px;
 }
+#cartTotalPrice{
+  padding: 15px;
+  background-color: #000;
+  color: #fff;
+  font-size: 30px;
+  display: block;
+}
   </style>
 </head>
 
@@ -162,6 +169,7 @@ h3 {
 <div class="cartArea">
 <h2>Cart</h2>
 <ul id="cartItems"></ul>
+<span id="cartTotalPrice"></span>
 </div>
 
 </div>
@@ -302,16 +310,35 @@ function renderCartUI() {
   });
 
   document.getElementById('totalValue').textContent = `$${cartTotal.toFixed(0)}`;
-  overLay.style.width = `${Math.min(cartTotal, 1600)}px`;
+
+  // Convert 100 = 10%
+  const devide = cartTotal / 10;
+  overLay.style.width = `${Math.min(devide, 100)}%`;
+  
+
+
+  // Display total price in cart
+
+     document.getElementById('cartTotalPrice').textContent =  `Total: $${cartTotal.toFixed(0)}`;
+
 
   // Discount logic
-  if (cartTotal >= 1600) {
+  if (cartTotal >= 600) {
     const discount = cartTotal * 0.10;
+    const finalTotal = (cartTotal - discount).toFixed(2);
+
     document.getElementById('allTotal').innerHTML = `Congratulations you got 10% discount, and save $${discount.toFixed(2)}`;
-    document.getElementById('totalValue').innerText = (cartTotal - discount).toFixed(2);
+    // document.getElementById('totalValue').innerText = (cartTotal - discount).toFixed(2);
+
+     document.getElementById('totalValue').innerText = finalTotal;
+    document.getElementById('cartTotalPrice').innerText = finalTotal; 
+    
   } else {
     document.getElementById('allTotal').innerHTML = "";
   }
+
+ 
+
 
   // Close buttons
   document.querySelectorAll('.closeBtn').forEach((btn) => {
