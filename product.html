@@ -52,20 +52,29 @@ h2 {
 }
 .progressBar {
   width: 100%;
-  height: 20px;
+  height: 10px;
   background-color: #000;
-  margin-bottom: 50px;
+  margin-top: 30px;
   position: relative;
 }
 .overlay {
   position: absolute;
   left: 0;
-  height: 20px;
+  height: 10px;
   background-color: #f00;
   text-align: right;
   top: 0;
   bottom: 0;
 }
+#totalValue {
+  top: -8px;
+  position: relative;
+  font-size: 21px;
+  background-color: #f00;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
 #progressBar::after {
   content: '';
   right: 0;
@@ -146,6 +155,12 @@ h3 {
   font-size: 30px;
   display: block;
 }
+#allTotal {
+  color: #000;
+  font-size: 19px !important;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
   </style>
 </head>
 
@@ -156,10 +171,10 @@ h3 {
 
 
 <div class="holder">
-<h1>All Total: <span id="allTotal"></span></h1>
+<!-- <h1>All Total: <span id="allTotal"></span></h1>
 <div class="progressBar" id="progressBar">
 <div class="overlay" id="overlay"><span id="totalValue"></span></div>
-</div>
+</div> -->
 
 <div class="proHolder">
   <div class="productArea">
@@ -168,6 +183,13 @@ h3 {
   </div>
 <div class="cartArea">
 <h2>Cart</h2>
+
+<span id="allTotal"></span>
+<div class="progressBar" id="progressBar">
+<div class="overlay" id="overlay"><span id="totalValue"></span></div>
+</div>
+
+
 <ul id="cartItems"></ul>
 <span id="cartTotalPrice"></span>
 </div>
@@ -265,17 +287,31 @@ document.querySelectorAll('.addToCartBtn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const index = btn.getAttribute('data-index');
     const product = products[index];
+    const quantityInput = document.getElementById(`quantity-${index}`);
     const quantity = parseInt(document.getElementById(`quantity-${index}`).value);
     const price = parseFloat(document.getElementById(`price-${index}`).textContent);
     const total = price * quantity;
 
-    cart.push({
-      image: product.image,
-      name: product.name,
-      price: product.price,
-      quantity: quantity,
-      total: total
-    });
+     // Check if product already exists in the cart
+    const existingItem = cart.find(item => item.name === product.name);
+
+    if (existingItem) {
+      // Update quantity and total
+      existingItem.quantity += quantity;
+      existingItem.total = existingItem.quantity * price;
+    } else {
+      // Add new item to cart
+      cart.push({
+        image: product.image,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+        total: price * quantity
+      });
+    }
+
+    // Reset the quantity field to 1
+    quantityInput.value = 1;
 
     cartTotal += total;
 
@@ -331,7 +367,7 @@ function renderCartUI() {
     // document.getElementById('totalValue').innerText = (cartTotal - discount).toFixed(2);
 
      document.getElementById('totalValue').innerText = finalTotal;
-    document.getElementById('cartTotalPrice').innerText = finalTotal; 
+    document.getElementById('cartTotalPrice').innerText = "Total: $" + finalTotal; 
     
   } else {
     document.getElementById('allTotal').innerHTML = "";
