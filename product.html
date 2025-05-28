@@ -67,12 +67,13 @@ h2 {
   bottom: 0;
 }
 #totalValue {
-  top: -8px;
-  position: relative;
-  font-size: 21px;
+  top: -4px;
+  position: absolute;
+  font-size: 17px;
   background-color: #f00;
-  padding: 5px 10px;
+  padding: 1px 5px;
   border-radius: 10px;
+  right: 0;
 }
 
 #progressBar::after {
@@ -105,9 +106,6 @@ h3 {
 .cartArea {
   width: 30%;
   padding: 20px;
-}
-#allTotal{
-  color: #206d10;
 }
 #cartItems .headerPart {
   display: flex;
@@ -148,18 +146,28 @@ h3 {
   border-bottom: 1px solid #8e8383;
   margin-bottom: 20px;
 }
-#cartTotalPrice{
+.calculationBox{
   padding: 15px;
   background-color: #000;
   color: #fff;
   font-size: 30px;
   display: block;
+  text-align: left;
 }
 #allTotal {
-  color: #000;
+  color: #049319;
   font-size: 19px !important;
   padding: 5px 10px;
   border-radius: 10px;
+}
+.calculationBox span {
+  float: right;
+}
+#discountText {
+  float: left;
+}
+.calculationBox div {
+  clear: both;
 }
   </style>
 </head>
@@ -185,18 +193,39 @@ h3 {
 <h2>Cart</h2>
 
 <span id="allTotal"></span>
-<div class="progressBar" id="progressBar">
-<div class="overlay" id="overlay"><span id="totalValue"></span></div>
+
+<!-- <div class="progressBar" id="progressBar">
+<div class="overlay" id="overlay"></div>
+</div> -->
+
+
+  <div style="background-color: #000; border-radius: 8px; overflow: hidden; height: 15px;">
+    <div id="discountProgress" style="height: 100%; width: 0%; background-color: #f00; height: 15px; position: relative;">
+<span id="totalValue"></span>
 </div>
+    </div>
+
 
 
 <ul id="cartItems"></ul>
-<span id="cartTotalPrice"></span>
+<div class="calculationBox">
+  <div class="">Subtotal: <span id="subTotal"></span></div>
+  <div class=""><div id="discountText"></div> <span id="discountAmount"></span></div>
+  <div class="">Total: <span id="cartTotalPrice"></span></div>
+</div>
 </div>
 
 </div>
 
-
+<style>
+  #discountProgress {
+  background-color: #4caf50;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 8px;
+}
+</style>
 
 
 
@@ -281,7 +310,7 @@ document.querySelectorAll('.quantitySelect').forEach((container) => {
 });
 
 // Add to cart logic
-const overLay = document.getElementById('overlay');
+// const overLay = document.getElementById('overlay');
 
 document.querySelectorAll('.addToCartBtn').forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -291,7 +320,7 @@ document.querySelectorAll('.addToCartBtn').forEach((btn) => {
     const quantity = parseInt(document.getElementById(`quantity-${index}`).value);
     const price = parseFloat(document.getElementById(`price-${index}`).textContent);
     const total = price * quantity;
-
+    //const resetTotal = document.getElementById('total-${index}').value
      // Check if product already exists in the cart
     const existingItem = cart.find(item => item.name === product.name);
 
@@ -312,6 +341,7 @@ document.querySelectorAll('.addToCartBtn').forEach((btn) => {
 
     // Reset the quantity field to 1
     quantityInput.value = 1;
+    //resetTotal.value = 1;
 
     cartTotal += total;
 
@@ -348,30 +378,51 @@ function renderCartUI() {
   document.getElementById('totalValue').textContent = `$${cartTotal.toFixed(0)}`;
 
   // Convert 100 = 10%
-  const devide = cartTotal / 10;
-  overLay.style.width = `${Math.min(devide, 100)}%`;
+  // const devide = cartTotal / 10;
+  // overLay.style.width = `${Math.min(devide, 100)}%`;
+ 
   
-
-
   // Display total price in cart
+     document.getElementById('cartTotalPrice').textContent =  `$${cartTotal.toFixed(0)}`;
+     document.getElementById('subTotal').innerHTML = '$' + cartTotal.toFixed(0);
+     
 
-     document.getElementById('cartTotalPrice').textContent =  `Total: $${cartTotal.toFixed(0)}`;
+document.getElementById('totalValue').innerText = cartTotal;
+
+
+// Set discount threshold
+const discountThreshold = 600;
+
+// Update progress bar
+const progressPercent = Math.min((cartTotal / discountThreshold) * 100, 100);
+const progressBar = document.getElementById('discountProgress');
+progressBar.style.width = progressPercent + '%';
+
+
 
 
   // Discount logic
-  if (cartTotal >= 600) {
+if (cartTotal >= discountThreshold) {
     const discount = cartTotal * 0.10;
     const finalTotal = (cartTotal - discount).toFixed(2);
 
     document.getElementById('allTotal').innerHTML = `Congratulations you got 10% discount, and save $${discount.toFixed(2)}`;
+    //print discount in amount in below the cart
+    document.getElementById('discountAmount').innerHTML = '- $' +  discount.toFixed(2);
     // document.getElementById('totalValue').innerText = (cartTotal - discount).toFixed(2);
 
-     document.getElementById('totalValue').innerText = finalTotal;
-    document.getElementById('cartTotalPrice').innerText = "Total: $" + finalTotal; 
+    //  document.getElementById('totalValue').innerText = finalTotal;
+    document.getElementById('cartTotalPrice').innerText = "$" + finalTotal; 
+
+    document.getElementById('discountText').innerHTML = "Discount Amount 10%:";
     
   } else {
-    document.getElementById('allTotal').innerHTML = "";
+    document.getElementById('allTotal').innerHTML = "Buy $600, Get 10% Off";
+    document.getElementById('discountText').innerHTML = "Discount Amount:";
+    document.getElementById('discountAmount').innerHTML = ' ';
   }
+
+
 
  
 
@@ -387,6 +438,7 @@ function renderCartUI() {
       // Update localStorage
       localStorage.setItem('cart', JSON.stringify(cart));
       localStorage.setItem('cartTotal', cartTotal.toString());
+
 
       renderCartUI();
     });
